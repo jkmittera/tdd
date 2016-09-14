@@ -55,6 +55,9 @@ class NewVisitorTest(LiveServerTestCase):
         
         ## We use a new broser session to make sure that no information of Edith's is 
         ## coming throught from cookies, etc
+        import time
+        time.sleep(5)
+        
         self.browser.quit()
         self.browser = webdriver.Firefox()
         
