@@ -1,13 +1,14 @@
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):       
         self.browser = webdriver.Firefox()
         
     def tearDown(self):
+        self.browser.refresh()
         self.browser.quit()
         
     def check_for_row_in_list_table(self, row_text):
@@ -56,12 +57,13 @@ class NewVisitorTest(LiveServerTestCase):
         ## We use a new broser session to make sure that no information of Edith's is 
         ## coming throught from cookies, etc
         import time
-        time.sleep(3)
-        
+        time.sleep(3)        
+        self.browser.refresh()
         self.browser.quit()
-        self.browser = webdriver.Firefox()
+                
         
         # Francis visits the home page. There is no sign of Edith's list
+        self.browser = webdriver.Firefox()
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
@@ -108,4 +110,5 @@ class NewVisitorTest(LiveServerTestCase):
             delta=10
         )
         
+        self.browser.refresh()
         
